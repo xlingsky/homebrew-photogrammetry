@@ -1,5 +1,5 @@
 # homebrew-photogrammetry
-homebrew formulae for photorammetry
+homebrew formulae for photogrammetry
 
 ## How do I install these formulae?
 
