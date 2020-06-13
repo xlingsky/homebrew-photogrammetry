@@ -1,36 +1,32 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook
-#                https://rubydoc.brew.sh/Formula
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
-class SiftGPU < Formula
-  desc "A fork repo for SiftGPU from Changchang Wu"
+class Siftgpu < Formula
+  desc "GPU version SIFT from Changchang Wu"
   homepage "http://ccwu.me"
-  url "https://github.com/xlingsky/SiftGPU/archive/v1.0.tar.gz"
-  sha256 "218bea69cf677af46a36357430577eea65a09585d19e920b66691a68c9d65873"
+  url "https://github.com/xlingsky/SiftGPU/archive/v1.2.tar.gz"
+  sha256 "4281f6930424562f27b525ceec85b01d337dc298387ebfdd24181533e439e16c"
 
   depends_on "cmake" => :build
 
   def install
-    # ENV.deparallelize  # if your formula fails when building in parallel
     system "cmake", ".", *std_cmake_args
-    system "make", "install" # if this fails, try separate make/make install steps
+    system "make", "install"
   end
 
-  resource("640-1.jpg") do
-    url "https://github.com/xlingsky/SiftGPU/blob/master/data/640-1.jpg"
+  head do
+    url "https://github.com/xlingsky/SiftGPU.git"
   end
 
   test do
-    # `test do` will create, run in and delete a temporary directory.
-    #
-    # This test will fail and we won't accept that! For Homebrew/homebrew-core
-    # this will need to be a test that verifies the functionality of the
-    # software. Run the test with `brew test SiftGPU`. Options passed
-    # to `brew install` such as `--HEAD` also need to be provided to `brew test`.
-    #
-    # The installed folder is not in the path, so use the entire path to any
-    # executables being tested: `system "#{bin}/program", "do", "something"`.
-    resource("640-1.jpg").stage do
-      assert_match "OK", shell_output("#{bin}/SimpleSIFT 640-1.jpg")
-    end
+    (testpath/"test.cpp").write <<~EOS
+      #include <SiftGPU.h>
+      int main(int argc, char* argv[]) {
+        SiftGPU  *sift = new SiftGPU; 
+        if(sift->CreateContextGL() != SiftGPU::SIFTGPU_FULL_SUPPORTED) return 1;
+        sift->DestroyContextGL();
+        delete sift;
+        return 0;
+      }
+    EOS
+    system ENV.cxx, "test.cpp", "-o", "test", "-L#{lib}", "-lsiftgpu"
+    system "./test"
   end
 end
