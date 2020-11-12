@@ -117,5 +117,4 @@ int main(int _argc, char** _argv) {
     system ENV.cxx, "test.cpp", "-o", "test", *flags
     system "./test"
   end
-  end
 end
