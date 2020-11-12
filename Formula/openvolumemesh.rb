@@ -1,6 +1,3 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook
-#                https://rubydoc.brew.sh/Formula
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
 class Openvolumemesh < Formula
   desc "Generic data structure for the comfortable handling of arbitrary polytopal meshes"
   homepage "https://openvolumemesh.org/"
